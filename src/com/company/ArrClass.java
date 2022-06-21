@@ -64,20 +64,13 @@ public class ArrClass {
 
     public int ThreadMin(){
         ThreadMin[] threadMin = new ThreadMin[threadNum];
-        int startIndex = 0;
-        int finishIndex = dim / threadNum;
-        int temp = dim % threadNum;
+        int step = dim / threadNum;
 
-        threadMin[0] = new ThreadMin(startIndex, finishIndex + temp, this);
-        startIndex = finishIndex;
-        finishIndex += (dim / threadNum) + temp;
-        threadMin[0].run();
-        for(int i = 1; i < threadNum; i++){
-            threadMin[i] = new ThreadMin(startIndex, finishIndex, this);
-            startIndex = finishIndex;
-            finishIndex += (dim / threadNum);
+        for(int i = 0; i < threadNum - 1; i++){
+            threadMin[i] = new ThreadMin(i * step, (i + 1) * step, this);
             threadMin[i].run();
         }
+        threadMin[threadNum - 1] = new ThreadMin((threadNum - 1) * step, dim - 1, this);
         return getMin();
     }
 
